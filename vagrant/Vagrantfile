@@ -1,0 +1,37 @@
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "php" do |v|
+    v.vm.provider "docker" do |d|
+      d.build_dir = "./docker/php"
+      d.remains_running = true
+      d.name = "app1-php"
+      # d.ports = ["7010:9000"] # maps the container's 9000 port, to the host machine's 7010 port
+    end
+  end
+
+  config.vm.define "nginx" do |v|
+    v.vm.synced_folder "./webapp", "/usr/share/nginx/html"
+    v.vm.provider "docker" do |d|
+      d.build_dir = "./docker/nginx"
+      d.remains_running = true
+      d.name = "app1-nginx"
+      d.ports = ["80:80"] # maps the container's 80 port, to the host machine's 80 port
+      d.link("app1-php:php")
+      # d.build_args = ["-t=vertxdev"]
+      # d.cmd = ["vertx", "run", "vertx-examples/src/raw/java/httphelloworld/HelloWorldServer.java"]
+      # d.volumes = ["/Users/gonzo/Workspace/docker/vagrant/webapp:/usr/share/nginx/html"]
+    end
+  end
+
+  # config.vm.define "mysql" do |v|
+  #   v.vm.provider "docker" do |d|
+  #     d.build_dir = "./docker/mysql"
+  #     d.remains_running = true
+  #     d.name = "app1-mysql"
+  #     d.ports = ["7020:3306"] # maps the container's 9000 port, to the host machine's 7020 port
+  #   end
+  # end
+
+end

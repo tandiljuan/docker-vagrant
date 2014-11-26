@@ -1,0 +1,9 @@
+FROM mysql
+
+ENV MYSQL_ROOT_PASSWORD Welcome1
+
+ENV MYSQL_USER app1
+ENV MYSQL_PASSWORD Welcome2
+ENV MYSQL_DATABASE app1
+
+# COPY webapp /usr/share/nginx/html
