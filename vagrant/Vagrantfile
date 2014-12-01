@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
   # BUILD WITH: vagrant up mysql --provider=docker
   config.vm.define "mysql" do |v|
     v.vm.provider "docker" do |d|
+      d.vagrant_vagrantfile = "./Vagrantfile.proxy"
       d.build_dir = "./docker/mysql"
       d.remains_running = true
       d.name = "mysql"
@@ -18,6 +19,7 @@ Vagrant.configure("2") do |config|
     # we sync the app folder to the php-fpm container b/c php-fpm needs to read files too
     v.vm.synced_folder "./webapp", "/opt/webapp"
     v.vm.provider "docker" do |d|
+      d.vagrant_vagrantfile = "./Vagrantfile.proxy"
       d.build_dir = "./docker/phpfpm"
       d.remains_running = true
       d.name = "phpfpm"
@@ -29,6 +31,7 @@ Vagrant.configure("2") do |config|
   # BUILD WITH: vagrant up nginx --provider=docker
   config.vm.define "nginx" do |v|
     v.vm.provider "docker" do |d|
+      d.vagrant_vagrantfile = "./Vagrantfile.proxy"
       d.build_dir = "./docker/nginx"
       d.remains_running = true
       d.name = "nginx"

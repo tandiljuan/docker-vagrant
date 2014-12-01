@@ -1,7 +1,5 @@
 <?php
 
-define( 'WP_MEMORY_LIMIT', '128M' );
-
 /**
  * The base configurations of the WordPress.
  *
@@ -72,8 +70,6 @@ $table_prefix  = 'wp_';
  * in their development environments.
  */
 define('WP_DEBUG', true);
-define('WP_DEBUG_DISPLAY', true);
-define('WP_DEBUG_LOG', true);
 
 /* That's all, stop editing! Happy blogging. */
 
