@@ -1,49 +1,46 @@
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
 
-# TU UP THIS IN ORDER
-# vagrant up --no-parallel
+# BUILD ALL WITH: vagrant up --no-parallel
 
 Vagrant.configure("2") do |config|
 
-  # vagrant up phpfpm --provider=docker
-  config.vm.define "phpfpm" do |v|
-    # we sync the app folder to the php-fpm
-    v.vm.synced_folder "./webapp", "/opt/webapp"
+  # BUILD WITH: vagrant up mysql --provider=docker
+  config.vm.define "mysql" do |v|
+    v.vm.provider "docker" do |d|
+      d.build_dir = "./docker/mysql"
+      d.remains_running = true
+      d.name = "mysql"
+    end
+  end
 
+  # BUILD WITH: vagrant up phpfpm --provider=docker
+  config.vm.define "phpfpm" do |v|
+    # we sync the app folder to the php-fpm container b/c php-fpm needs to read files too
+    v.vm.synced_folder "./webapp", "/opt/webapp"
     v.vm.provider "docker" do |d|
       d.build_dir = "./docker/phpfpm"
       d.remains_running = true
       d.name = "phpfpm"
-      # d.ports = ["7010:9000"] # maps the container's 9000 port, to the host machine's 7010 port
+      # this adds an mysql host in the /etc/hosts on this container with the dynamic internal ip that mysql gets 
+      d.link("mysql:mysql")
     end
   end
 
-  # vagrant up nginx --provider=docker
+  # BUILD WITH: vagrant up nginx --provider=docker
   config.vm.define "nginx" do |v|
     v.vm.provider "docker" do |d|
       d.build_dir = "./docker/nginx"
       d.remains_running = true
       d.name = "nginx"
-      d.ports = ["80:80","443:443"] # maps the container's 80 port, to the host machine's 80 port
+      # maps the container's 80 port, to the host machine's 80 port
+      d.ports = ["80:80","443:443"] 
+      # this adds an phpfpm host in the /etc/hosts on this container with the dynamic internal ip that phpfpm gets 
       d.link("phpfpm:phpfpm")
+      # same location as the phpfpm box
       d.volumes = ["/opt/webapp"]
+      # tell this container to mount volumes from the phpfpm box
       d.create_args = ["--volumes-from=phpfpm"]
-      
-      # d.build_args = ["volumes-from"]
-      # --privileged=true
-      # --volumes-from phpfpm
-      # d.build_args = ["-t=vertxdev"]
-      # d.cmd = ["vertx", "run", "vertx-examples/src/raw/java/httphelloworld/HelloWorldServer.java"]
     end
   end
-
-  # config.vm.define "mysql" do |v|
-  #   v.vm.provider "docker" do |d|
-  #     d.build_dir = "./docker/mysql"
-  #     d.remains_running = true
-  #     d.name = "app1-mysql"
-  #     d.ports = ["7020:3306"] # maps the container's 9000 port, to the host machine's 7020 port
-  #   end
-  # end
 
 end
