@@ -35,13 +35,15 @@ Vagrant.configure("2") do |config|
   # BUILD WITH: vagrant up nginx --provider=docker
   config.vm.define "nginx" do |v|
     v.vm.provider "docker" do |d|
+      # Needed to force the Proxy VM in a Linux host with docker
+      #d.force_host_vm = true
       d.vagrant_vagrantfile = "./Vagrantfile.proxy"
       d.build_dir = "./docker/nginx"
       d.remains_running = true
       d.name = "nginx"
       # maps the container's 80 port, to the host machine's 80 port
-      d.ports = ["80:80","443:443"] 
-      # this adds an phpfpm host in the /etc/hosts on this container with the dynamic internal ip that phpfpm gets 
+      d.ports = ["80:80","443:443"]
+      # this adds an phpfpm host in the /etc/hosts on this container with the dynamic internal ip that phpfpm gets
       d.link("phpfpm:phpfpm")
       # same location as the phpfpm box
       d.volumes = ["/opt/webapp"]
