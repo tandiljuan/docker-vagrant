@@ -19,9 +19,6 @@ listen = 0.0.0.0:9000' /etc/php5/fpm/pool.d/www.conf
 RUN sed -i 's/^listen.allowed_clients/;listen.allowed_clients/' /etc/php5/fpm/pool.d/www.conf
 
 # new ones
-# RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php5/fpm/pool.d/www.conf
-# RUN sed -i "s/;php_admin_flag\[log_errors\] = .*/php_admin_flag[log_errors] = true/" /etc/php5/fpm/pool.d/www.conf
-# RUN sed -i "s/;php_flag\[display_errors\] = .*/php_flag[display_errors] = on/" /etc/php5/fpm/pool.d/www.conf
 RUN sed -i "s/;php_admin_value\[memory_limit\] = .*/php_admin_value[memory_limit] = 128M/" /etc/php5/fpm/pool.d/www.conf
 
 # DATA VOLUMES

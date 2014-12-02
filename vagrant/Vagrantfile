@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
   # BUILD WITH: vagrant up phpfpm --provider=docker
   config.vm.define "phpfpm" do |v|
     # we sync the app folder to the php-fpm container b/c php-fpm needs to read files too
-    v.vm.synced_folder "./webapp", "/opt/webapp"
+    v.vm.synced_folder "./webapp", "/opt/webapp", type: "rsync", rsync__exclude: ".git/"
     v.vm.provider "docker" do |d|
       d.vagrant_vagrantfile = "./Vagrantfile.proxy"
       d.build_dir = "./docker/phpfpm"
