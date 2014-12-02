@@ -3,12 +3,8 @@ FROM ubuntu:14.04
 RUN apt-get update
 RUN apt-get -y dist-upgrade
 
-RUN apt-get -y install php5 php5-fpm php5-mysql \
-    php5-xcache php5-xmlrpc
-
-# Wordpress Requirements
-RUN apt-get -y install php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap \
-    php5-mcrypt php5-memcache php5-ming php5-ps php5-pspell php5-recode php5-sqlite php5-tidy php5-xmlrpc php5-xsl
+RUN apt-get -y install php5 php5-fpm php5-mcrypt
+RUN php5enmod mcrypt
 
 RUN sed -i '/daemonize /c \
 daemonize = no' /etc/php5/fpm/php-fpm.conf
