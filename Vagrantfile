@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
   # BUILD WITH: vagrant up phpfpm --provider=docker
   config.vm.define "phpfpm" do |v|
     # we sync the app folder to the php-fpm container b/c php-fpm needs to read files too
-    v.vm.synced_folder "./laravel", "/opt/webapp", create: true
+    v.vm.synced_folder "laravel/", "/opt/webapp", create: true
     v.vm.provider "docker" do |d|
       # Needed to force the Proxy VM in a Linux host with docker
       #d.force_host_vm = true
