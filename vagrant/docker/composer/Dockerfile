@@ -26,4 +26,13 @@ RUN $HHVM_COMMAND installer
 
 # Install Laravel
 WORKDIR /opt/laravel
-CMD $HHVM_COMMAND $COMPOSER_PATH/composer.phar create-project laravel/laravel --prefer-dist --no-dev --no-scripts
+CMD if [ "$(ls -A laravel)" ]; then \
+        # Install/update and existent Laravel app
+        cd laravel; \
+        $HHVM_COMMAND $COMPOSER_PATH/composer.phar install --prefer-dist --no-dev --no-scripts; \
+    else \
+        # Install a new Laravel app
+        $HHVM_COMMAND $COMPOSER_PATH/composer.phar create-project laravel/laravel --prefer-dist --no-dev --no-scripts; \
+    fi \
+    # Make the storage folder writable by anyone
+    && chmod -R 777 /opt/laravel/laravel/app/storage
