@@ -1,5 +1,5 @@
-.DS_Store
-*.sublime-project
-*.sublime-workspace
-
 .vagrant
+
+# Laravel
+*.swp
+laravel
